@@ -50,6 +50,7 @@ export default class AutoGrowingTextInput extends Component {
         {...this.props} {...this.style}
         style={[this.props.style, {height: 'auto'}]}
         ref={(r) => { this._textInput = r; }}
+        onContentSizeChange={(event) => this.isFocused() && this.props.onContentSizeChange(event)}
       />
     );
   }
