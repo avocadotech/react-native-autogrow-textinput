@@ -12,6 +12,10 @@ export default class AutoGrowingTextInput extends Component {
     this.setNativeProps = this.setNativeProps.bind(this);
   }
 
+  state = {
+    focused: false,
+  }
+
   componentDidMount() {
     if(this.shouldApplyNativeSettings()) {
       const reactTag = this.textInputReactTag();
@@ -43,6 +47,18 @@ export default class AutoGrowingTextInput extends Component {
     }
   }
 
+  onFocus = () => {
+    const { onFocus = () => {} } = this.props;
+    this.setState({focused: true});
+    onFocus();
+  }
+
+  onBlur = () => {
+    const { onBlur = () => {} } = this.props;
+    this.setState({focused: false});
+    onBlur();
+  }
+
   render() {
     return (
       <TextInput
@@ -50,7 +66,10 @@ export default class AutoGrowingTextInput extends Component {
         {...this.props} {...this.style}
         style={[this.props.style, {height: 'auto'}]}
         ref={(r) => { this._textInput = r; }}
+        placeholderTextColor={this.state.focused ? '#ababab' : this.props.placeholderTextColor}
         onContentSizeChange={(event) => this.isFocused() && this.props.onContentSizeChange(event)}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
       />
     );
   }
